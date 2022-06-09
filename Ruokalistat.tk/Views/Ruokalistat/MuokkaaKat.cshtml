@@ -1,0 +1,25 @@
+﻿@model Kategoria
+@{
+    ViewData["Title"] = Model.Nimi;
+}
+
+<h1>Muokkaa</h1>
+
+@using (Html.BeginForm("MuokkaaKat", "Ruokalistat",new { YritysID = ViewBag.yritysID, katID = ViewBag.katID }, FormMethod.Post))
+{
+    <table class="table">
+        <tr>
+            <th>Nimi</th>
+            <td>@Html.TextBoxFor(o => o.Nimi)</td>
+        </tr>
+        <tr>
+            <th>Kuvaus</th>
+            <td>@Html.TextBoxFor(o => o.Kuvaus)</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td><button class="btn btn-dark text-white" type="submit">Muokkaa</button></td>
+        </tr>
+    </table>
+}
+

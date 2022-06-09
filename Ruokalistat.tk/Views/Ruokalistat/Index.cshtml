@@ -1,0 +1,103 @@
+﻿@model PagedList.PagedList<Yritys>
+@{
+    ViewData["Title"] = "Ruokalistat";
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <a class="btn btn-dark text-white" href="@Url.Action("Uusi","Ruokalistat")">Lisää uusi</a>
+    <br />
+}
+<label>Hae ravintolaa <input id="hakusana" /> <button class="btn btn-dark" onclick="Hae()">Hae</button></label>
+<br />
+<label>Kaupunki @Html.DropDownList("kaupunki", (List<SelectListItem>)ViewBag.kaupungit, "Valitse kaupunki", new { onchange = "ValitseKaupunki()" })</label>
+<table class="table table-striped table-sm">
+    <thead>
+        <tr>
+            <th>Ravintola</th>
+            <th class="turha">Y-Tunnus</th>
+            <th>Osoite</th>
+            <th class="turha">Päivitetty</th>
+            <th class="turha" >Annokset (kpl)</th>
+            @if (User.Identity.IsAuthenticated || (User.Identity.IsAuthenticated && User.IsInRole("Admin")))
+            {
+                <th>Ylläpito</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Ravintola in Model)
+        {
+            <tr>
+                <td><a class="btn btn-dark text-white" onclick="Katso(@Ravintola.ID,'@Ravintola.Ruokalista?.piilotettu')" style="cursor:pointer;">@Ravintola.Nimi</a></td>
+                <td class="turha">@Ravintola.yTunnus</td>
+                <td>@Ravintola.Osoite, @Ravintola.Postinumero @Ravintola.Kaupunki</td>
+                <td class="turha">@Ravintola.Ruokalista?.viimeksiPaivitetty.ToString("g", System.Globalization.CultureInfo.GetCultureInfo("fi-Fi"))</td>
+                <td class="turha">@Ravintola.Ruokalista?.RuuatCount</td>
+                @if (User.Identity.IsAuthenticated || (User.Identity.IsAuthenticated && User.IsInRole("Admin")))
+                {
+                    <td>
+                        @Html.ActionLink("Poista", "Poista", "Ruokalistat", new { ID = Ravintola.ID }, new { @class = "btn btn-danger" })
+                        @Html.ActionLink("Muokkaa", "Muokkaa", "Ruokalistat", new { ID = Ravintola.ID }, new { @class = "btn btn-dark text-white" })
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+Sivu @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+<br />
+@if (Model.PageNumber > 1)
+{
+    @Html.ActionLink("Edellinen sivu", "Index", "Ruokalistat", new { sivu = Model.PageNumber - 1 }, new { @class = "btn btn-dark" })
+}
+@if (Model.PageNumber > 0 && Model.PageNumber < Model.PageCount)
+{
+    @Html.ActionLink("Seuraava sivu", "Index", "Ruokalistat", new { sivu = Model.PageNumber + 1 }, new { @class = "btn btn-dark" })
+}
+<i style="background-color: red; color: black; display:block; padding: 20px; font-size: 1rem; margin: 5px; font-weight: 500;">
+    Digiruokalista.com ei vastaa tietojen oikeellisuudesta.
+    Digiruokalista.com ei itse myy palvelussa olevia tuotteita, vaan kerää ravintoloilta tiedot kuluttajien vertailtavaksi.
+    Digiruokalista.com ei ole vastuussa sivuilla esitetyistä mahdollisista vääristä tuotteista, hinnoista tai tuotetiedoista. Suosittelemme tarkistamaan tuotteen hinnan ravintolasta ennen tilausta.
+</i>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function() {
+        $('#kaupunki').select2({
+            language: {
+                inputTooShort: function () {
+                    return "Syötä pitempi hakusana";
+                },
+                noResults: function() {
+                    return "Ei löytynyt yhtään."
+                }
+            }
+        });
+    });
+    
+
+    function Katso(id, piilotettu) {
+        if (piilotettu == "False") {
+            window.location.href = "@Url.Action("Katso", "Ruokalistat")" + "?YritysID=" + id;
+        }
+    }
+    function Hae() {
+        var hakusana = $('#hakusana').val();
+        if (hakusana.length == 0) {
+            window.location.href = "@Url.Action("Index", "Ruokalistat")";
+        } else {
+            window.location.href = "@Url.Action("Index", "Ruokalistat")" + "?hakusana=" + encodeURIComponent(hakusana.toLowerCase());
+        }
+    }
+    function ValitseKaupunki() {
+        var kaupunki = $('#kaupunki').val();
+        if (kaupunki == "Valitse kaupunki") {
+            window.location.href = "@Url.Action("Index", "Ruokalistat")";
+        } else {
+            window.location.href = "@Url.Action("Index", "Ruokalistat")" + "?kaupunki=" + encodeURIComponent(kaupunki.toLowerCase());
+        }
+    }
+
+</script>

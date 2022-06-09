@@ -1,0 +1,221 @@
+﻿@model Yritys
+@{
+    ViewData["Title"] = "Muokkaa";
+}
+
+<h1>Muokkaa</h1>
+
+@using (Html.BeginForm("Muokkaa", "Ruokalistat", FormMethod.Post))
+{
+    <table class="table table-sm">
+        <tr>
+            <th>Nimi</th>
+            <td>@Html.TextBoxFor(o => o.Nimi)</td>
+        </tr>
+        <tr>
+            <th>Y-Tunnus</th>
+            <td>@Html.TextBoxFor(o => o.yTunnus)</td>
+        </tr>
+        <tr>
+            <th>Kaupunki</th>
+            <td>@Html.TextBoxFor(o => o.Kaupunki)</td>
+        </tr>
+        <tr>
+            <th>Postinumero</th>
+            <td>@Html.TextBoxFor(o => o.Postinumero)</td>
+        </tr>
+        <tr>
+            <th>Osoite</th>
+            <td>@Html.TextBoxFor(o => o.Osoite)</td>
+        </tr>
+        <tr>
+            <th>Puhelinnumero</th>
+            <td>@Html.TextBoxFor(o => o.Puhelin)</td>
+        </tr>
+        <tr>
+            <th>Piilotettu</th>
+            <td>@Html.CheckBoxFor(o => o.Ruokalista.piilotettu)</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td><button class="btn btn-dark text-white" type="submit">Muokkaa</button></td>
+        </tr>
+    </table>
+}
+
+@if (Model.ID > 0)
+{
+    <hr />
+    @if (Model.Ruokalista.Kategoriat != null && Model.Ruokalista.Kategoriat.Count > 0)
+    {
+        <h2>Kategoriat</h2>
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr class="bg-dark text-white">
+                    <th>Nimi</th>
+                    <th>Kuvaus</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Toiminnot</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var kategoria in Model.Ruokalista.Kategoriat.ToList())
+                {
+                    <tr>
+                        <td>@kategoria.Nimi</td>
+                        <td>@kategoria.Kuvaus</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            @Html.ActionLink("Poista", "PoistaKat", "Ruokalistat", new { ID = Model.ID, KatID = kategoria.ID }, new { @class = "btn btn-danger" })
+                            @Html.ActionLink("Muokkaa", "MuokkaaKat", "Ruokalistat", new { ID = Model.ID, KatID = kategoria.ID }, new { @class = "btn btn-dark text-white" })
+                        </td>
+                    </tr>
+                    if (kategoria.Ruuat != null && kategoria.Ruuat.Count > 0)
+                    {
+                        <tr class="bg-dark text-white">
+                            <th>Ruuat</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr class="bg-dark text-white">
+                            <th>AnnosNro</th>
+                            <th>Nimi</th>
+                            <th>Vegan</th>
+                            <th>Annos</th>
+                            <th>Hinta</th>
+                            <th>Kuvaus</th>
+                            <th></th>
+                            <th>Toiminnot</th>
+                        </tr>
+                        foreach (var Ruoka in kategoria.Ruuat.OrderBy(o => o.AnnosNumero).ThenBy(o => o.Hinta))
+                        {
+            <tr>
+                <td>@Ruoka.AnnosNumero</td>
+                <td>@Ruoka.Nimi</td>
+                @if (Ruoka.Vegan)
+                {
+
+
+                    <td>Kyllä</td>
+                }
+                else
+                {
+                    <td>Ei</td>
+                }
+                @if (Ruoka.Annos)
+                {
+
+
+                    <td>Kyllä</td>
+                }
+                else
+                {
+                    <td>Ei</td>
+                }
+                <td>@Ruoka.Hinta.ToString("0.00 €")</td>
+                <td>@Ruoka.Kuvaus</td>
+                <td></td>
+                <td>
+                    @Html.ActionLink("Poista", "PoistaRuoka", "Ruokalistat", new { ID = Model.ID, RuokaID = Ruoka.ID }, new { @class = "btn btn-danger" })
+                    @Html.ActionLink("Muokkaa", "MuokkaaRuoka", "Ruokalistat", new { ID = Model.ID, RuokaID = Ruoka.ID }, new { @class = "btn btn-dark text-white" })
+                </td>
+            </tr>
+                        }
+                        <tr class="bg-dark text-white">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                    }
+                }
+            </tbody>
+
+        </table>
+        <hr />
+        <h2>Lisää uusi</h2>
+        @using (Html.BeginForm("UusiRuoka", "Ruokalistat", new { YritysID = Model.ID }, FormMethod.Post))
+        {
+            <h4>Ruoka</h4>
+            <table class="table table-sm">
+                <tr>
+                    <th>Kategoria</th>
+                    <td>
+                        <select name="Kategoria">
+                            @foreach (var kategoria in Model.Ruokalista.Kategoriat)
+                            {
+                                <option value="@kategoria.ID">@kategoria.Nimi</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>AnnosNro</th>
+                    <td>@Html.TextBox("annosNro",0)</td>
+                </tr>
+                <tr>
+                    <th>Nimi</th>
+                    <td>@Html.TextBox("Nimi3")</td>
+                </tr>
+                <tr>
+                    <th>Hinta</th>
+                    <td>@Html.TextBox("Hinta")</td>
+                </tr>
+                <tr>
+                    <th>Kuvaus</th>
+                    <td>@Html.TextBox("Kuvaus2")</td>
+                </tr>
+                <tr>
+                    <th>Vegaaninen</th>
+                    <td>@Html.CheckBox("Vegan")</td>
+                </tr>
+                <tr>
+                    <th>Annos</th>
+                    <td>@Html.CheckBox("Annos")</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><button class="btn btn-dark text-white" type="submit">Lisää</button></td>
+                </tr>
+            </table>
+        }
+    }
+
+    @using (Html.BeginForm("UusiKat", "Ruokalistat", new { YritysID = Model.ID }, FormMethod.Post))
+    {
+        <h4>Kategoria</h4>
+        <table class="table table-sm">
+            <tr>
+                <th>Nimi</th>
+                <td>@Html.TextBox("Nimi2")</td>
+            </tr>
+            <tr>
+                <th>Kuvaus</th>
+                <td>@Html.TextBox("Kuvaus")</td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><button class="btn btn-dark text-white" type="submit">Lisää</button></td>
+            </tr>
+        </table>
+    }
+
+}

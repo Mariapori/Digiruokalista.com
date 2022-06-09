@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Etusivu";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Ravintoloiden ruokalistat diginä!</h1>
+    <h4>Oletko kyllästynyt zoomailemaan ruokalistojen kuvia?</h4>
+    <h5>Enää ei tarvitse!</h5>
+    @Html.ActionLink("Siirry ruokalistoihin","Index","Ruokalistat",null, new{ @class = "btn btn-dark"})
+</div>
+<i style="background-color: red; color: black; display:block; padding: 20px; font-size: 1rem; margin: 5px; font-weight: 500;">
+    Digiruokalista.com ei vastaa tietojen oikeellisuudesta.
+    Digiruokalista.com ei itse myy palvelussa olevia tuotteita, vaan kerää ravintoloilta tiedot kuluttajien vertailtavaksi.
+    Digiruokalista.com ei ole vastuussa sivuilla esitetyistä mahdollisista vääristä tuotteista, hinnoista tai tuotetiedoista. Suosittelemme tarkistamaan tuotteen hinnan ravintolasta ennen tilausta.
+</i>
+<div class="text-center">
+    <div class="fb-page" data-href="https://www.facebook.com/Digiruokalista/" data-tabs="timeline" data-width="" data-height="" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/Digiruokalista/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/Digiruokalista/">Ruokalista.tk</a></blockquote></div>
+</div>
+<div class="text-sm-center">
+    Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+</div>

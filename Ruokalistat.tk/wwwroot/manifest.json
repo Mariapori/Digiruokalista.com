@@ -1,0 +1,29 @@
+{
+  "name": "Digiruokalista.com",
+  "short_name": "Digiruokalista",
+  "start_url": "/Ruokalistat",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "Ravintoloiden ruokalistat digin�!",
+  "icons": [
+    {
+      "src": "icons/96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }
+  ],
+  "prefer_related_applications": true,
+  "related_applications": [
+    {
+      "platform": "play",
+      "id":  "fi.mariapori.digiruokalista",
+      "url": "https://play.google.com/store/apps/details?id=fi.mariapori.digiruokalista"
+    }
+  ]
+}

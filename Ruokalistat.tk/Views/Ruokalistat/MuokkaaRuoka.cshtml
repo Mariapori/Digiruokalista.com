@@ -1,0 +1,41 @@
+﻿@model Ruoka
+@{
+    ViewData["Title"] = Model.Nimi;
+}
+
+<h1>Muokkaa</h1>
+
+@using (Html.BeginForm("MuokkaaRuoka", "Ruokalistat",new { YritysID = ViewBag.yritysID, RuokaID = ViewBag.ruokaID }, FormMethod.Post))
+{
+<table class="table">
+    <tr>
+        <th>AnnosNro</th>
+        <td>@Html.TextBoxFor(o => o.AnnosNumero)</td>
+    </tr>
+    <tr>
+        <th>Nimi</th>
+        <td>@Html.TextBoxFor(o => o.Nimi)</td>
+    </tr>
+    <tr>
+        <th>Kuvaus</th>
+        <td>@Html.TextBoxFor(o => o.Kuvaus)</td>
+    </tr>
+    <tr>
+        <th>Hinta</th>
+        <td>@Html.TextBoxFor(o => o.Hinta)</td>
+    </tr>
+    <tr>
+        <th>Vegan</th>
+        <td>@Html.CheckBoxFor(o => o.Vegan)</td>
+    </tr>
+    <tr>
+        <th>Annos</th>
+        <td>@Html.CheckBoxFor(o => o.Annos)</td>
+    </tr>
+    <tr>
+        <th></th>
+        <td><button class="btn btn-dark text-white" type="submit">Muokkaa</button></td>
+    </tr>
+</table>
+}
+

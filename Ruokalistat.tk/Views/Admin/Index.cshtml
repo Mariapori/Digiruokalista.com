@@ -1,0 +1,98 @@
+﻿@{
+    ViewData["Title"] = "Hallinta";
+}
+
+<h1>Hallinta</h1>
+<hr />
+<h2>Käyttäjät</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+        <th>Käyttäjä</th>
+        <th>Toiminnot</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach  (AspNetUser kayttaja in ViewBag.users)
+	{
+		 <tr>
+             <td>@kayttaja.Email</td>
+             <td>@Html.ActionLink("Poista", "PoistaKayttaja", "Admin", new { id = kayttaja.Id },new { @class = "btn btn-danger" })</td>
+         </tr>
+	}
+    </tbody>
+</table>
+<hr />
+<h2>Vaihda yrityksen omistaja</h2>
+@using (Html.BeginForm("VaihdaYrityksenOmistaja", "Admin", FormMethod.Post))
+{
+<table class="table">
+    <tr>
+        <th>Yritys</th>
+        <td>
+            <select name="YritysID">
+                @foreach (Yritys Yritys in ViewBag.yritykset)
+                {
+                    <option value="@Yritys.ID">@Yritys.Nimi</option>
+                }
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>Uusi omistaja</th>
+        <td>
+            <select name="uusiOmistaja">
+                @foreach (AspNetUser kayttaja in ViewBag.users)
+                {
+                    <option value="@kayttaja.Id">@kayttaja.Email</option>
+                }
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th></th>
+        <td><button class="btn btn-dark" type="submit">Vaihda</button></td>
+    </tr>
+</table>
+}
+<hr />
+<h2>Kopio yritys</h2>
+@using (Html.BeginForm("KopioYritys", "Admin", FormMethod.Post))
+{
+<table class="table">
+    <tr>
+        <th>Yritys</th>
+        <td>
+            <select name="YritysID">
+                @foreach (Yritys Yritys in ViewBag.yritykset)
+                {
+                    <option value="@Yritys.ID">@Yritys.Nimi</option>
+                }
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th></th>
+        <td><button class="btn btn-dark" type="submit">Kopioi</button></td>
+    </tr>
+</table>
+}
+<hr />
+<h2>Uusi käyttäjä</h2>
+@using (Html.BeginForm("UusiKayttaja", "Admin", FormMethod.Post))
+{
+<table class="table">
+    <tr>
+        <th>Sähköposti</th>
+        <td>@Html.TextBox("email")</td>
+    </tr>
+    <tr>
+        <th>Salasana</th>
+        <td>@Html.TextBox("password")</td>
+    </tr>
+        <tr>
+        <th></th>
+        <td><button type="submit" class="btn btn-dark">Luo</button></td>
+    </tr>
+</table>
+}

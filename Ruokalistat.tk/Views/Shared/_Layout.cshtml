@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="keywords" content="Ruokalistat, Digiruokalista.com, Alajärvi, Pizzeria, Grilli, Ravintola, Ruokalista">
+    <meta name="description" content="Ravintoloiden ruokalistat diginä!">
+    <title>@ViewData["Title"] - Digiruokalista.com</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="manifest" href="~/manifest.json">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm fixed-top navbar-toggleable-sm navbar-dark text-white bg-dark border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img alt="Logo" src="~/icons/32x32.png" style="padding: 5px;">Digiruokalista.com</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Etusivu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Ruokalistat" asp-action="Index">Ruokalistat</a>
+                        </li>
+                                    <li class="nav-item">
+                            <a class="nav-link text-white" href="https://www.buymeacoffee.com/digiruokalista" target="_blank">Tue palvelua!</a>
+                        </li>
+                        @if(User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            {
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-area="" asp-controller="Admin" asp-action="Index">Hallinta</a>
+                    </li>
+            }
+            <li class="nav-item">
+                            <a class="nav-link text-white" href="/swagger" target="_blank">API</a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Home" asp-action="OtaYhteytta" class="btn btn-danger navbar-btn">Ota yhteyttä</a>
+                        </li>
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            <button class="add-button btn btn btn-dark">Asenna sovellus</button>
+            <br />
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer bg-dark text-white">
+        <div class="container">
+            &copy; 2021-@DateTime.Now.Year.ToString()  - Digiruokalista.com
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXC3EWQP5L"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XXC3EWQP5L');
+</script>
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/fi_FI/sdk.js#xfbml=1&version=v12.0&appId=950843875525503&autoLogAppEvents=1" nonce="jTyHT3bD"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

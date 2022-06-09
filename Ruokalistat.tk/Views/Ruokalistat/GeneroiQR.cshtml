@@ -1,0 +1,29 @@
+﻿@model QRCodeViewModel
+@{ 
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@Model.yritys.Nimi - QR-koodi</title>
+</head>
+<body style="margin: 150px">
+    <div style="border: 3px solid black;">
+        <div style="margin: 0 auto; text-align: center; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+            <h1>Digiruokalista.com</h1>
+            <h2>Ravintoloiden ruokalistat diginä!</h2>
+        </div>
+        <div style="margin: 0 auto; text-align: center; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+            <h3>@Model.yritys.Nimi</h3>
+            <h4>@Model.yritys.Osoite, @Model.yritys.Postinumero @Model.yritys.Kaupunki</h4>
+            <h3>@Model.yritys.Puhelin</h3>
+        </div>
+        <div style="margin: 0 auto; text-align: center; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+            <h3>Skannaa QR-koodi ja pääset ruokalistaan</h3>
+            <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.qr))" />
+        </div>
+    </div>
+</body>
+</html>

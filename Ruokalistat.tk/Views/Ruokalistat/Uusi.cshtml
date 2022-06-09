@@ -1,0 +1,45 @@
+﻿@model Yritys
+@{
+    ViewData["Title"] = "Uusi";
+}
+
+<h1>Uusi</h1>
+
+@using (Html.BeginForm("Uusi", "Ruokalistat", FormMethod.Post))
+{
+<table class="table">
+    <tr>
+        <th>Nimi</th>
+        <td>@Html.TextBoxFor(o => o.Nimi)</td>
+    </tr>
+    <tr>
+        <th>Y-Tunnus</th>
+        <td>@Html.TextBoxFor(o => o.yTunnus)</td>
+    </tr>
+    <tr>
+        <th>Kaupunki</th>
+        <td>@Html.TextBoxFor(o => o.Kaupunki)</td>
+    </tr>
+    <tr>
+        <th>Postinumero</th>
+        <td>@Html.TextBoxFor(o => o.Postinumero)</td>
+    </tr>
+    <tr>
+        <th>Osoite</th>
+        <td>@Html.TextBoxFor(o => o.Osoite)</td>
+    </tr>
+    <tr>
+        <th>Puhelinnumero</th>
+        <td>@Html.TextBoxFor(o => o.Puhelin)</td>
+    </tr>
+    <tr>
+        <th>Piilotettu</th>
+        <td>@Html.CheckBoxFor(o => o.Ruokalista.piilotettu)</td>
+    </tr>
+    <tr>
+        <th></th>
+        <td><button class="btn btn-dark text-white" type="submit">Luo</button></td>
+    </tr>
+</table>
+}
+

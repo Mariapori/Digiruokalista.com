@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewData["Title"] = "Ota yhteyttä!";
+}
+
+<div class="text-center">
+    <h1>Ota yhteyttä!</h1>
+    <h4>Jos chat ei käynnisty, tarkista ettei selaimesi asetukset estä sitä.</h4>
+    <div class="card" style="max-width: 20rem; margin:0 auto;">
+        <div class="card-header">
+            Et halua käyttää facebookia?
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Ei hätää!</h5>
+            <p class="card-text">Voit lähettää sähköpostia painamalla</p>
+            <a href="mailto:topias@mariapori.fi" class="btn btn-dark">Tästä</a>
+        </div>
+    </div>
+</div>
+
+<!-- Messenger Chat Plugin Code -->
+<div id="fb-root"></div>
+
+<!-- Your Chat Plugin code -->
+<div id="fb-customer-chat" class="fb-customerchat">
+</div>
+
+<script>
+      var chatbox = document.getElementById('fb-customer-chat');
+      chatbox.setAttribute("page_id", "111802597947134");
+      chatbox.setAttribute("attribution", "biz_inbox");
+
+      window.fbAsyncInit = function() {
+        FB.init({
+          xfbml            : true,
+          version          : 'v12.0'
+        });
+      };
+
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/fi_FI/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+</script>
