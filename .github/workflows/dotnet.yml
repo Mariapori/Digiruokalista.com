@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
     - uses: actions/checkout@v3
@@ -23,7 +23,7 @@ jobs:
       run: dotnet build --no-restore
     - name: Publish
       run: dotnet publish -p:PublishProfile=FolderProfile
-    - name: Upload WebApp1 Build Artifact
+    - name: Upload Build Artifact
       uses: actions/upload-artifact@v2
       with:
         name: Digiruokalista
