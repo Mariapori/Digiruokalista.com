@@ -23,8 +23,9 @@ jobs:
       run: dotnet build --no-restore
     - name: Publish
       run: dotnet publish -p:PublishProfile=FolderProfile
-    - name: Upload Build Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: Digiruokalista
-        path: /home/runner/work/Digiruokalista.com/Digiruokalista.com/Ruokalistat.tk/bin/Debug/net6.0/publish/
+    - name: Stop ruokalista systemd service
+      run: service ruokalista stop
+    - name: Production update
+      run:  rsync -va --delete-after Digiruokalista.com/Digiruokalista.com/Ruokalistat.tk/bin/Debug/net6.0/publish/ /home/ubuntu/Ruokalista/
+    - name: Start ruokalista systemd service
+      run: service ruokalista start     
