@@ -24,8 +24,8 @@ jobs:
     - name: Publish
       run: dotnet publish -p:PublishProfile=FolderProfile
     - name: Stop ruokalista systemd service
-      run: service ruokalista stop
+      run: sudo systemctl stop ruokalista
     - name: Production update
       run:  rsync -va --delete-after Digiruokalista.com/Digiruokalista.com/Ruokalistat.tk/bin/Debug/net6.0/publish/ /home/ubuntu/Ruokalista/
     - name: Start ruokalista systemd service
-      run: service ruokalista start     
+      run: sudo systemctl start ruokalista    
