@@ -365,8 +365,6 @@ FodyWeavers.xsd
 # App Databases
 .vscode/launch.json
 .vscode/tasks.json
-Ruokalistat.tk/Program.cs
-Ruokalistat.tk/Program.cs
 Ruokalistat.tk/tietokanta.db-shm
 Ruokalistat.tk/tietokanta.db-wal
 Ruokalistat.tk/sitemap.xml
