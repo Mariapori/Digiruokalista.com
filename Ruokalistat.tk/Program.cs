@@ -62,6 +62,8 @@ namespace Ruokalistat.tk
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
                 app.UseForwardedHeaders();
+                app.UseDeveloperExceptionPage();
+                app.UseMigrationsEndPoint();
             }
             else
             {
@@ -69,8 +71,7 @@ namespace Ruokalistat.tk
                 app.UseMigrationsEndPoint();
                 app.UseForwardedHeaders();
             }
-            app.UseDeveloperExceptionPage();
-
+     
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCors("all");
