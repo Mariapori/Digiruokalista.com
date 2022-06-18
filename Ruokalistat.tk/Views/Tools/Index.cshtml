@@ -65,7 +65,6 @@ function Populoi(event) {
             {
                 "RavintolaID": ravintolaID
             }, function(data) {
-                console.log(data);
                 $.each(data, function (i, item) {
                     $('#ruuat').append($('<option>', { 
                         value: item.id,
