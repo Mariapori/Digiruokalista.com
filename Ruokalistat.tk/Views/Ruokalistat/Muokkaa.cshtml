@@ -219,3 +219,16 @@
     }
 
 }
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        if (localStorage['page'] == document.URL) {
+              document.body.scrollTop = localStorage['scrollTop'];
+              document.documentElement.scrollTop = localStorage['scrollTop'];
+        }
+        $(document).scroll(function () {
+            localStorage['page'] = document.URL;
+            localStorage['scrollTop'] = $(document).scrollTop();
+        });
+    });
+</script>
