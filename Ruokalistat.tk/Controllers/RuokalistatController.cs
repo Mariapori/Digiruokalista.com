@@ -189,12 +189,13 @@ namespace Ruokalistat.tk.Controllers
             var user = db.AspNetUsers.First(o => o.Email == User.Identity.Name);
             var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == YritysID && (o.Owner == user || User.IsInRole("Admin")));
             var kategoria = yritys.Ruokalista.Kategoriat.First(o => o.ID == Kategoria);
-
-            kategoria.Ruuat.Add(new Ruoka { Vegan = Vegan, Nimi = Nimi3, Kuvaus = Kuvaus2, Hinta = Hinta, Annos = Annos , AnnosNumero = annosNro});
+            var ruoka = new Ruoka { Vegan = Vegan, Nimi = Nimi3, Kuvaus = Kuvaus2, Hinta = Hinta, Annos = Annos, AnnosNumero = annosNro };
+            kategoria.Ruuat.Add(ruoka);
 
             yritys.Ruokalista.viimeksiPaivitetty = DateTime.Now;
             db.SaveChanges();
-
+            db.Hintahistoria.Add(new Digiruokalista.com.Models.Hintahistoria { PVM = DateTime.Now, Ruoka = ruoka });
+            db.SaveChanges();
             return RedirectToAction("Muokkaa", yritys);
         }
         public IActionResult PoistaRuoka(int ID, int RuokaID)
@@ -231,6 +232,12 @@ namespace Ruokalistat.tk.Controllers
 
             ruoka.Nimi = model.Nimi;
             ruoka.Kuvaus = model.Kuvaus;
+
+            if(ruoka.Hinta != model.Hinta)
+            {
+                db.Hintahistoria.Add(new Digiruokalista.com.Models.Hintahistoria { PVM = DateTime.Now, Ruoka = model });
+            }
+
             ruoka.Hinta = model.Hinta;
             ruoka.Vegan = model.Vegan;
             ruoka.Annos = model.Annos;

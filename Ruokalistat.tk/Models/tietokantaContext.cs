@@ -1,4 +1,5 @@
 ﻿using System;
+using Digiruokalista.com.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -26,6 +27,7 @@ namespace Ruokalistat.tk.Models
         public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
         public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
         public virtual DbSet<Yritys> Yritys { get; set; }
+        public virtual DbSet<Hintahistoria> Hintahistoria { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -1,7 +1,82 @@
 ﻿
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Työkalut";
+    List<Digiruokalista.com.Models.Hintahistoria> Hintahistoria = null;
+    if(ViewBag.hintahistoria != null)
+    {
+          Hintahistoria  = ViewBag.hintahistoria;
+    }
+    List<Yritys> Ravintolat = ViewBag.ravintolat;
 }
 
-<h1>Index</h1>
+<h1>Työkalut</h1>
 
+<h2>Hintahistoria</h2>
+
+@if(@ViewBag.hintahistoria != null)
+{
+    <h3>@Hintahistoria.Select(o => o.Ruoka.Nimi).First()</h3>
+    <table class="table table-striped">
+        <thead class="table-dark text-white">
+            <tr>
+                <th>PVM</th>
+                <th>Hinta</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var historia in Hintahistoria)
+       {
+           <tr>
+               <th>@historia.PVM.ToShortDateString()</th>
+               <th>@historia.Ruoka.Hinta.ToString("0.00 €")</th>
+           </tr>
+       }
+        </tbody>
+    </table>
+    @Html.ActionLink("Takaisin","Index","Tools",null,new {@class = "btn btn-danger"})
+}else{
+@using(Html.BeginForm("GetHintahistoria","Tools", FormMethod.Get)){
+    <label>Valitse ravintola:</label>
+    <select id="ravintola" name="ravintola" onchange="Populoi(event)">
+       <option value="0">Valitse ravintola</option>
+        @foreach (var rafla in Ravintolat)
+       {
+          <option value="@rafla.ID">@rafla.Nimi</option>
+       }
+    </select>
+    <br />
+    <label id="lblValitse" style="display: none;">Valitse ruoka:</label>
+    <select id="ruuat" name="ruuat" style="display: none;"></select>
+    <br />
+    <button id="submitNappi" type="submit" class="btn btn-primary" style="display: none;">Hae</button>
+}
+}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script type="text/javascript">
+function Populoi(event) {
+    var ravintolaID = event.target.value;
+    if (ravintolaID === "0") {
+        $("#ruuat").hide();
+        $("#submitNappi").hide();
+        $("#lblValitse").hide();
+        $("#ruuat").find('option').remove().end();
+    } else {
+        $.get("@Url.Action("GetRuuat","Tools")",
+            {
+                "RavintolaID": ravintolaID
+            }, function(data) {
+                console.log(data);
+                $.each(data, function (i, item) {
+                    $('#ruuat').append($('<option>', { 
+                        value: item.id,
+                        text : item.nimi 
+                }));
+                $("#lblValitse").show();
+                $("#ruuat").show();
+                $("#submitNappi").show();
+            });
+            }, "json"
+        );
+    }
+}
+</script>
