@@ -69,6 +69,8 @@ namespace Ruokalistat.tk
                 app.UseMigrationsEndPoint();
                 app.UseForwardedHeaders();
             }
+            app.UseDeveloperExceptionPage();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCors("all");
