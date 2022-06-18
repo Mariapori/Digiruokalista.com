@@ -83,7 +83,7 @@ namespace Ruokalistat.tk
 
 
             app.MapSwagger();
-
+            
             app.MapRazorPages();
 
             app.UseSwaggerUI(c =>
@@ -99,8 +99,11 @@ namespace Ruokalistat.tk
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/Identity/Account/Register", context => Task.Factory.StartNew(() => context.Response.Redirect("/Identity/Account/Login", true, true)));
-                endpoints.MapPost("/Identity/Account/Register", context => Task.Factory.StartNew(() => context.Response.Redirect("/Identity/Account/Login", true, true)));
+                if (!app.Environment.IsDevelopment())
+                {
+                    endpoints.MapGet("/Identity/Account/Register", context => Task.Factory.StartNew(() => context.Response.Redirect("/Identity/Account/Login", true, true)));
+                    endpoints.MapPost("/Identity/Account/Register", context => Task.Factory.StartNew(() => context.Response.Redirect("/Identity/Account/Login", true, true)));
+                }
             });
 
 

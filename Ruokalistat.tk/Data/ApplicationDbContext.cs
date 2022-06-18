@@ -11,6 +11,7 @@ namespace Ruokalistat.tk.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+            
         }
     }
 }

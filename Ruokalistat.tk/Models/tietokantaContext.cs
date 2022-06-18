@@ -10,6 +10,7 @@ namespace Ruokalistat.tk.Models
     {
         public tietokantaContext()
         {
+            Database.Migrate();
         }
 
         public tietokantaContext(DbContextOptions<tietokantaContext> options)

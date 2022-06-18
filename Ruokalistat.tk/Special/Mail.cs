@@ -12,17 +12,17 @@ namespace Ruokalistat.tk.Special
         
         public static async Task Laheta(string email, string subject, string body)
         {
-            await smtp.ConnectAsync(Properties.Resources.smtpHost, Convert.ToInt32(Properties.Resources.smtpPort), Convert.ToBoolean(Properties.Resources.useSSL));
-            if(!string.IsNullOrEmpty(Properties.Resources.username) && !string.IsNullOrEmpty(Properties.Resources.password))
+            await smtp.ConnectAsync(Digiruokalista.com.Properties.Resources.smtpHost, Convert.ToInt32(Digiruokalista.com.Properties.Resources.smtpPort), Convert.ToBoolean(Digiruokalista.com.Properties.Resources.useSSL));
+            if(!string.IsNullOrEmpty(Digiruokalista.com.Properties.Resources.username) && !string.IsNullOrEmpty(Digiruokalista.com.Properties.Resources.password))
             {
-                await smtp.AuthenticateAsync(Properties.Resources.username, Properties.Resources.password);
+                await smtp.AuthenticateAsync(Digiruokalista.com.Properties.Resources.username, Digiruokalista.com.Properties.Resources.password);
             }
 
             var viesti = new MimeKit.MimeMessage();
 
             viesti.To.Add(MimeKit.InternetAddress.Parse(email));
-            viesti.From.Add(MimeKit.MailboxAddress.Parse(Properties.Resources.sender));
-            viesti.Sender = MimeKit.MailboxAddress.Parse(Properties.Resources.sender);
+            viesti.From.Add(MimeKit.MailboxAddress.Parse(Digiruokalista.com.Properties.Resources.sender));
+            viesti.Sender = MimeKit.MailboxAddress.Parse(Digiruokalista.com.Properties.Resources.sender);
             viesti.Subject = subject;
 
             var viestinbody = new MimeKit.BodyBuilder();

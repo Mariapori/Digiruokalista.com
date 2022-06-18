@@ -31,6 +31,7 @@ namespace Ruokalistat.tk.Models
         public int ID { get; set; }
         public List<Kategoria> Kategoriat { get; set; }
         public DateTime viimeksiPaivitetty { get; set; }
+        [Required]
         public bool piilotettu { get; set; }
         
         public int? RuuatCount

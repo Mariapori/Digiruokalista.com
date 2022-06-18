@@ -118,19 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="password" xml:space="preserve">
-    <value></value>
+    <value />
   </data>
   <data name="sender" xml:space="preserve">
     <value>noreply@mariapori.fi</value>
   </data>
   <data name="smtpHost" xml:space="preserve">
-    <value>mail.mariapori.fi</value>
+    <value>smtp.japo.fi</value>
   </data>
   <data name="smtpPort" xml:space="preserve">
     <value>25</value>
   </data>
   <data name="username" xml:space="preserve">
-    <value></value>
+    <value />
   </data>
   <data name="useSSL" xml:space="preserve">
     <value>false</value>

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Ruokalistat.tk.Properties {
+namespace Digiruokalista.com.Properties {
     using System;
     
     
@@ -19,10 +19,10 @@ namespace Ruokalistat.tk.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace Ruokalistat.tk.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Ruokalistat.tk.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Digiruokalista.com.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace Ruokalistat.tk.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,9 @@ namespace Ruokalistat.tk.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kakkaa123!!.
+        ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string password {
+        public static string password {
             get {
                 return ResourceManager.GetString("password", resourceCulture);
             }
@@ -72,43 +72,43 @@ namespace Ruokalistat.tk.Properties {
         /// <summary>
         ///   Looks up a localized string similar to noreply@mariapori.fi.
         /// </summary>
-        internal static string sender {
+        public static string sender {
             get {
                 return ResourceManager.GetString("sender", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to mail.mariapori.fi.
+        ///   Looks up a localized string similar to smtp.japo.fi.
         /// </summary>
-        internal static string smtpHost {
+        public static string smtpHost {
             get {
                 return ResourceManager.GetString("smtpHost", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 465.
+        ///   Looks up a localized string similar to 25.
         /// </summary>
-        internal static string smtpPort {
+        public static string smtpPort {
             get {
                 return ResourceManager.GetString("smtpPort", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to noreply@mariapori.fi.
+        ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string username {
+        public static string username {
             get {
                 return ResourceManager.GetString("username", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to true.
+        ///   Looks up a localized string similar to false.
         /// </summary>
-        internal static string useSSL {
+        public static string useSSL {
             get {
                 return ResourceManager.GetString("useSSL", resourceCulture);
             }
