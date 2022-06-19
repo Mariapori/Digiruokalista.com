@@ -194,8 +194,8 @@ namespace Ruokalistat.tk.Controllers
 
             yritys.Ruokalista.viimeksiPaivitetty = DateTime.Now;
             db.SaveChanges();
-            db.Hintahistoria.Add(new Digiruokalista.com.Models.Hintahistoria { PVM = DateTime.Now, Ruoka = ruoka });
-            db.SaveChanges();
+            //db.Hintahistoria.Add(new Digiruokalista.com.Models.Hintahistoria { PVM = DateTime.Now, Ruoka = ruoka });
+            //db.SaveChanges();
             return RedirectToAction("Muokkaa", yritys);
         }
         public IActionResult PoistaRuoka(int ID, int RuokaID)
@@ -235,7 +235,7 @@ namespace Ruokalistat.tk.Controllers
 
             if(ruoka.Hinta != model.Hinta)
             {
-                db.Hintahistoria.Add(new Digiruokalista.com.Models.Hintahistoria { PVM = DateTime.Now, Ruoka = model });
+                //db.Hintahistoria.Add(new Digiruokalista.com.Models.Hintahistoria { PVM = DateTime.Now, Ruoka = model });
             }
 
             ruoka.Hinta = model.Hinta;
