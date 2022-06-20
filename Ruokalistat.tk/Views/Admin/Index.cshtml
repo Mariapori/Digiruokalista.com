@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@{
     ViewData["Title"] = "Hallinta";
 }
 
@@ -13,7 +14,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach  (AspNetUser kayttaja in ViewBag.users)
+       @foreach  (IdentityUser kayttaja in ViewBag.users)
 	{
 		 <tr>
              <td>@kayttaja.Email</td>
@@ -42,7 +43,7 @@
         <th>Uusi omistaja</th>
         <td>
             <select name="uusiOmistaja">
-                @foreach (AspNetUser kayttaja in ViewBag.users)
+                @foreach (IdentityUser kayttaja in ViewBag.users)
                 {
                     <option value="@kayttaja.Id">@kayttaja.Email</option>
                 }

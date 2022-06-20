@@ -21,19 +21,20 @@ namespace Ruokalistat.tk.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : Microsoft.AspNetCore.Mvc.Controller
     {
-        private tietokantaContext db = new tietokantaContext();
+        private tietokantaContext db;
 
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public AdminController(UserManager<IdentityUser> userManager,SignInManager<IdentityUser> signInManager)
+        public AdminController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, tietokantaContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            this.db = db;
         }
         public IActionResult Index()
         {
-            ViewBag.users = db.AspNetUsers.ToList();
+            ViewBag.users = _userManager.Users.ToList();
             ViewBag.yritykset = db.Yritys.ToList();
             return View();
         }
@@ -46,12 +47,12 @@ namespace Ruokalistat.tk.Controllers
         }
 
         [HttpPost]
-        public IActionResult VaihdaYrityksenOmistaja(int YritysID, string uusiOmistaja)
+        public async Task<IActionResult> VaihdaYrityksenOmistaja(int YritysID, string uusiOmistaja)
         {
             var yritys = db.Yritys.Find(YritysID);
-            var user = db.AspNetUsers.Find(uusiOmistaja);
+            var user = await _userManager.FindByIdAsync(uusiOmistaja);
 
-            yritys.Owner = user;
+            yritys.Owner = user.Id;
 
             db.SaveChanges();
 
@@ -62,7 +63,7 @@ namespace Ruokalistat.tk.Controllers
         [HttpPost]
         public async Task<IActionResult> UusiKayttaja(string email, string password)
         {
-            var user = new IdentityUser { UserName = email, Email = email, EmailConfirmed = true};
+            var user = new IdentityUser { UserName = email, Email = email, EmailConfirmed = true };
             var result = await _userManager.CreateAsync(user, password);
 
 
@@ -88,15 +89,17 @@ namespace Ruokalistat.tk.Controllers
             klooni.Ruokalista.viimeksiPaivitetty = yritys.Ruokalista.viimeksiPaivitetty;
             klooni.Ruokalista.Kategoriat = new List<Kategoria>();
 
-            foreach(var kat in yritys.Ruokalista.Kategoriat){
-                klooni.Ruokalista.Kategoriat.Add(new Kategoria{ Nimi = kat.Nimi, Kuvaus = kat.Kuvaus, Ruuat = new List<Ruoka>() });
-                foreach(var ruoka in kat.Ruuat){
-                    klooni.Ruokalista.Kategoriat.First(o => o.Nimi == kat.Nimi).Ruuat.Add(new Ruoka{ Nimi = ruoka.Nimi, Hinta = ruoka.Hinta, Annos = ruoka.Annos, Kuvaus = ruoka.Kuvaus, Vegan = ruoka.Vegan, AnnosNumero = ruoka.AnnosNumero});
+            foreach (var kat in yritys.Ruokalista.Kategoriat)
+            {
+                klooni.Ruokalista.Kategoriat.Add(new Kategoria { Nimi = kat.Nimi, Kuvaus = kat.Kuvaus, Ruuat = new List<Ruoka>() });
+                foreach (var ruoka in kat.Ruuat)
+                {
+                    klooni.Ruokalista.Kategoriat.First(o => o.Nimi == kat.Nimi).Ruuat.Add(new Ruoka { Nimi = ruoka.Nimi, Hinta = ruoka.Hinta, Annos = ruoka.Annos, Kuvaus = ruoka.Kuvaus, Vegan = ruoka.Vegan, AnnosNumero = ruoka.AnnosNumero });
                 }
             }
             db.Yritys.Add(klooni);
             db.SaveChanges();
-            return RedirectToAction("Muokkaa", "Ruokalistat", new{ ID = klooni.ID });
+            return RedirectToAction("Muokkaa", "Ruokalistat", new { ID = klooni.ID });
         }
     }
 }

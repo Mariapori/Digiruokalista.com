@@ -9,7 +9,13 @@ namespace Digiruokalista.com.Controllers
 {
     public class ToolsController : Controller
     {
-        private readonly tietokantaContext db = new tietokantaContext();
+        private tietokantaContext db;
+
+        public ToolsController(tietokantaContext db)
+        {
+            this.db = db;
+        }
+
         public async Task<IActionResult> Index()
         {
             ViewBag.ravintolat = await db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).ToListAsync();
@@ -27,7 +33,7 @@ namespace Digiruokalista.com.Controllers
             return Json(ruuat);
         }
 
-        public async Task<IActionResult> GetHintahistoria(int ravintola,int ruuat)
+        public async Task<IActionResult> GetHintahistoria(int ravintola, int ruuat)
         {
             ViewBag.ravintolat = await db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).ToListAsync();
             ViewBag.hintahistoria = await db.Hintahistoria.Where(o => o.Ruoka.ID == ruuat).ToListAsync();

@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Ruokalistat.tk.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +15,7 @@ using System.Threading.Tasks;
 using AspNetCore.SEOHelper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.OpenApi.Models;
-
+using Ruokalistat.tk.Models;
 
 namespace Ruokalistat.tk
 {
@@ -28,12 +27,12 @@ namespace Ruokalistat.tk
 
             // Add services to the container.
             builder.Services.AddRazorPages();
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            builder.Services.AddDbContext<tietokantaContext>(options =>
             options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<tietokantaContext>();
             builder.Services.AddControllersWithViews();
             builder.WebHost.UseUrls("http://*:6669");
 

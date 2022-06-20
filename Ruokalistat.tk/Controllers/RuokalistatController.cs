@@ -12,15 +12,25 @@ using System.Threading.Tasks;
 using static QRCoder.PayloadGenerator;
 using PagedList;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace Ruokalistat.tk.Controllers
 {
-    
+
     [Authorize]
     public class RuokalistatController : Microsoft.AspNetCore.Mvc.Controller
     {
-        private tietokantaContext db = new tietokantaContext();
+        private tietokantaContext db;
         private int tuloksienMaara = 15;
+
+
+        public RuokalistatController(tietokantaContext db) 
+        {
+            this.db = db;
+        }
+
+
         [AllowAnonymous]
         public IActionResult Index(int? sivu = 1, string? hakusana = "", string? kaupunki = "")
         {
@@ -28,7 +38,7 @@ namespace Ruokalistat.tk.Controllers
             var ravintolat = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).OrderBy(o => o.Nimi).Where(o => o.Ruokalista.piilotettu == false);
             if (User.Identity.IsAuthenticated)
             {
-                var user = db.AspNetUsers.First(o => o.Email == User.Identity.Name);
+                var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 ravintolat = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).OrderBy(o => o.Nimi).Where(o => o.Owner == user || User.IsInRole("Admin"));
             }
 
@@ -43,7 +53,7 @@ namespace Ruokalistat.tk.Controllers
                 ViewBag.kaupunki = kaupunki;
             }
 
-            return View(ravintolat.ToPagedList<Yritys>(sivu.GetValueOrDefault(),tuloksienMaara));
+            return View(ravintolat.ToPagedList<Yritys>(sivu.GetValueOrDefault(), tuloksienMaara));
         }
 
         public IActionResult Uusi()
@@ -58,7 +68,7 @@ namespace Ruokalistat.tk.Controllers
 
             foreach (var item in db.Yritys.Select(o => o.Kaupunki).Distinct().OrderBy(o => o).ToList())
             {
-                if(item.ToLower() == kaupunki)
+                if (item.ToLower() == kaupunki)
                 {
                     lista.Add(new SelectListItem { Text = item, Value = item, Selected = true });
                 }
@@ -75,7 +85,7 @@ namespace Ruokalistat.tk.Controllers
         {
             try
             {
-                var user = db.AspNetUsers.First(o => o.Email == User.Identity.Name);
+                var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 model.Ruokalista = new Ruokalista();
                 model.Owner = user;
                 db.Yritys.Add(model);
@@ -90,7 +100,7 @@ namespace Ruokalistat.tk.Controllers
 
         public IActionResult Poista(int ID)
         {
-            var user = db.AspNetUsers.First(o => o.Email == User.Identity.Name);
+            var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var ravintola = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
             db.Yritys.Remove(ravintola);
             db.SaveChanges();
@@ -99,7 +109,7 @@ namespace Ruokalistat.tk.Controllers
 
         public IActionResult Muokkaa(int ID)
         {
-            var user = db.AspNetUsers.First(o => o.Email == User.Identity.Name);
+            var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var ravintola = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
             return View(ravintola);
         }
@@ -109,7 +119,7 @@ namespace Ruokalistat.tk.Controllers
         {
             try
             {
-                var user = db.AspNetUsers.First(o => o.Email == User.Identity.Name);
+                var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var vanha = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == model.ID && (o.Owner == user || User.IsInRole("Admin")));
 
                 vanha.Kaupunki = model.Kaupunki;
@@ -119,7 +129,7 @@ namespace Ruokalistat.tk.Controllers
                 vanha.Puhelin = model.Puhelin;
                 vanha.yTunnus = model.yTunnus;
                 vanha.Ruokalista.piilotettu = model.Ruokalista.piilotettu;
-                
+
 
                 db.SaveChanges();
             }
@@ -132,7 +142,7 @@ namespace Ruokalistat.tk.Controllers
         [HttpPost]
         public IActionResult UusiKat(int YritysID, string Kuvaus, string Nimi2)
         {
-            var user = db.AspNetUsers.First(o => o.Email == User.Identity.Name);
+            var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == YritysID && (o.Owner == user || User.IsInRole("Admin")));
             if (yritys.Ruokalista == null)
             {
@@ -143,11 +153,11 @@ namespace Ruokalistat.tk.Controllers
             yritys.Ruokalista.viimeksiPaivitetty = DateTime.Now;
             db.SaveChanges();
 
-            return View("Muokkaa",yritys);
+            return View("Muokkaa", yritys);
         }
         public IActionResult PoistaKat(int ID, int KatID)
         {
-            var user = db.AspNetUsers.First(o => o.Email == User.Identity.Name);
+            var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).First(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
             var kategoria = yritys.Ruokalista.Kategoriat.First(o => o.ID == KatID);
             yritys.Ruokalista.viimeksiPaivitetty = DateTime.Now;
@@ -159,7 +169,7 @@ namespace Ruokalistat.tk.Controllers
 
         public IActionResult MuokkaaKat(int ID, int KatID)
         {
-            var user = db.AspNetUsers.First(o => o.Email == User.Identity.Name);
+            var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).First(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
             var kategoria = yritys.Ruokalista.Kategoriat.First(o => o.ID == KatID);
 
@@ -169,9 +179,9 @@ namespace Ruokalistat.tk.Controllers
             return View("MuokkaaKat", kategoria);
         }
         [HttpPost]
-        public IActionResult MuokkaaKat(int katID,int YritysID, Kategoria model)
+        public IActionResult MuokkaaKat(int katID, int YritysID, Kategoria model)
         {
-            var user = db.AspNetUsers.First(o => o.Email == User.Identity.Name);
+            var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).First(o => o.ID == YritysID && (o.Owner == user || User.IsInRole("Admin")));
             var kategoria = yritys.Ruokalista.Kategoriat.First(o => o.ID == katID);
 
@@ -184,9 +194,9 @@ namespace Ruokalistat.tk.Controllers
             return RedirectToAction("Muokkaa", yritys);
         }
         [HttpPost]
-        public IActionResult UusiRuoka(int Kategoria, int YritysID,string Nimi3, string Kuvaus2, bool Vegan, decimal Hinta, bool Annos, int annosNro)
+        public IActionResult UusiRuoka(int Kategoria, int YritysID, string Nimi3, string Kuvaus2, bool Vegan, decimal Hinta, bool Annos, int annosNro)
         {
-            var user = db.AspNetUsers.First(o => o.Email == User.Identity.Name);
+            var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == YritysID && (o.Owner == user || User.IsInRole("Admin")));
             var kategoria = yritys.Ruokalista.Kategoriat.First(o => o.ID == Kategoria);
             var ruoka = new Ruoka { Vegan = Vegan, Nimi = Nimi3, Kuvaus = Kuvaus2, Hinta = Hinta, Annos = Annos, AnnosNumero = annosNro };
@@ -194,13 +204,15 @@ namespace Ruokalistat.tk.Controllers
 
             yritys.Ruokalista.viimeksiPaivitetty = DateTime.Now;
             db.SaveChanges();
-            //db.Hintahistoria.Add(new Digiruokalista.com.Models.Hintahistoria { PVM = DateTime.Now, Ruoka = ruoka });
-            //db.SaveChanges();
+
+            db.Hintahistoria.Add(new Digiruokalista.com.Models.Hintahistoria { PVM = DateTime.Now, Ruoka = ruoka, Hinta = Hinta });
+            db.SaveChanges();
+
             return RedirectToAction("Muokkaa", yritys);
         }
         public IActionResult PoistaRuoka(int ID, int RuokaID)
         {
-            var user = db.AspNetUsers.First(o => o.Email == User.Identity.Name);
+            var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
             var ruoka = yritys.Ruokalista.Kategoriat.SelectMany(o => o.Ruuat).First(o => o.ID == RuokaID);
 
@@ -214,7 +226,7 @@ namespace Ruokalistat.tk.Controllers
 
         public IActionResult MuokkaaRuoka(int ID, int RuokaID)
         {
-            var user = db.AspNetUsers.First(o => o.Email == User.Identity.Name);
+            var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
             var ruoka = yritys.Ruokalista.Kategoriat.SelectMany(o => o.Ruuat).First(o => o.ID == RuokaID);
 
@@ -226,26 +238,32 @@ namespace Ruokalistat.tk.Controllers
         [HttpPost]
         public IActionResult MuokkaaRuoka(int RuokaID, int YritysID, Ruoka model)
         {
-            var user = db.AspNetUsers.First(o => o.Email == User.Identity.Name);
+            bool hintaMuuttui = false;
+            var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == YritysID && (o.Owner == user || User.IsInRole("Admin")));
             var ruoka = yritys.Ruokalista.Kategoriat.SelectMany(o => o.Ruuat).First(o => o.ID == RuokaID);
 
-            ruoka.Nimi = model.Nimi;
-            ruoka.Kuvaus = model.Kuvaus;
-
             if(ruoka.Hinta != model.Hinta)
             {
-                //db.Hintahistoria.Add(new Digiruokalista.com.Models.Hintahistoria { PVM = DateTime.Now, Ruoka = model });
+                hintaMuuttui = true;
             }
 
+            ruoka.Nimi = model.Nimi;
+            ruoka.Kuvaus = model.Kuvaus;
             ruoka.Hinta = model.Hinta;
             ruoka.Vegan = model.Vegan;
             ruoka.Annos = model.Annos;
             ruoka.AnnosNumero = model.AnnosNumero;
 
             yritys.Ruokalista.viimeksiPaivitetty = DateTime.Now;
-            db.SaveChanges();
+            
 
+            if (hintaMuuttui)
+            {
+                db.Hintahistoria.Add(new Digiruokalista.com.Models.Hintahistoria { PVM = DateTime.Now, Ruoka = ruoka, Hinta = model.Hinta });
+            }
+
+            db.SaveChanges();
             return RedirectToAction("Muokkaa", yritys);
         }
         [AllowAnonymous]
@@ -255,7 +273,8 @@ namespace Ruokalistat.tk.Controllers
             return View("Katso", yritys);
         }
         [AllowAnonymous]
-        public IActionResult Arvostele(int YritysID){
+        public IActionResult Arvostele(int YritysID)
+        {
             var yritys = db.Yritys.Include(o => o.Arvostelut).Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == YritysID);
 
             if (yritys.Arvostelut.Where(o => o.source == GetIP()).ToList().Count == 0)
@@ -283,7 +302,7 @@ namespace Ruokalistat.tk.Controllers
         {
             var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == YritysID);
 
-            Url generator = new Url(Url.Action("Katso", "Ruokalistat", new { YritysID = yritys.ID },"https"));
+            Url generator = new Url(Url.Action("Katso", "Ruokalistat", new { YritysID = yritys.ID }, "https"));
             string payload = generator.ToString();
 
             QRCodeGenerator qrGenerator = new QRCodeGenerator();

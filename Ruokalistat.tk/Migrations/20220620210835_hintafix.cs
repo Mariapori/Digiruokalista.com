@@ -2,25 +2,25 @@
 
 #nullable disable
 
-namespace Ruokalistat.tk.Migrations
+namespace Digiruokalista.com.Migrations
 {
-    public partial class annosnumero : Migration
+    public partial class hintafix : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "AnnosNumero",
-                table: "Ruoka",
-                type: "INTEGER",
+            migrationBuilder.AddColumn<decimal>(
+                name: "Hinta",
+                table: "Hintahistoria",
+                type: "TEXT",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: 0m);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "AnnosNumero",
-                table: "Ruoka");
+                name: "Hinta",
+                table: "Hintahistoria");
         }
     }
 }

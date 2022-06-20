@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,7 +24,7 @@ namespace Ruokalistat.tk.Models
         public string Kaupunki { get; set; }
         public string Puhelin { get; set; }
         public Ruokalista Ruokalista { get; set; }
-        public AspNetUser Owner { get; set; }
+        public string Owner { get; set; }
         public List<Arvostelu> Arvostelut {get;set;}
     }
 

@@ -36,7 +36,7 @@ namespace Ruokalistat.tk.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID 'user.Id'.");
+                return NotFound($"Unable to load user with ID 'user'.");
             }
 
             CurrentLogins = await _userManager.GetLoginsAsync(user);
@@ -52,7 +52,7 @@ namespace Ruokalistat.tk.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID 'user.Id'.");
+                return NotFound($"Unable to load user with ID 'user'.");
             }
 
             var result = await _userManager.RemoveLoginAsync(user, loginProvider, providerKey);
@@ -83,13 +83,13 @@ namespace Ruokalistat.tk.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID 'user.Id'.");
+                return NotFound($"Unable to load user with ID 'user'.");
             }
 
             var info = await _signInManager.GetExternalLoginInfoAsync(user.Id);
             if (info == null)
             {
-                throw new InvalidOperationException($"Unexpected error occurred loading external login info for user with ID '{user.Id}'.");
+                throw new InvalidOperationException($"Unexpected error occurred loading external login info for user with ID '{user}'.");
             }
 
             var result = await _userManager.AddLoginAsync(user, info);

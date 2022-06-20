@@ -16,11 +16,12 @@ namespace Ruokalistat.tk.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IWebHostEnvironment _env;
-        static tietokantaContext db = new tietokantaContext();
-        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment env)
+        private tietokantaContext db;
+        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment env, tietokantaContext db)
         {
             _logger = logger;
             _env = env;
+            this.db = db;
         }
         public IActionResult Index()
         {

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Ruokalistat.tk.Data;
+
 
 [assembly: HostingStartup(typeof(Ruokalistat.tk.Areas.Identity.IdentityHostingStartup))]
 namespace Ruokalistat.tk.Areas.Identity

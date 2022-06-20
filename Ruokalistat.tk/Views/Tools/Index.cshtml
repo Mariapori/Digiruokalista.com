@@ -28,7 +28,7 @@
        {
            <tr>
                <th>@historia.PVM.ToShortDateString()</th>
-               <th>@historia.Ruoka.Hinta.ToString("0.00 €")</th>
+               <th>@historia.Hinta.ToString("0.00 €")</th>
            </tr>
        }
         </tbody>
@@ -55,11 +55,12 @@
 <script type="text/javascript">
 function Populoi(event) {
     var ravintolaID = event.target.value;
-    if (ravintolaID === "0") {
         $("#ruuat").hide();
         $("#submitNappi").hide();
         $("#lblValitse").hide();
         $("#ruuat").find('option').remove().end();
+    if (ravintolaID === "0") {
+        return;
     } else {
         $.get("@Url.Action("GetRuuat","Tools")",
             {

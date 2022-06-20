@@ -85,7 +85,7 @@ namespace Ruokalistat.tk.Areas.Identity.Pages.Account
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
-                        values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
+                        values: new { area = "Identity", userId = user, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
                     await Special.Mail.Laheta(Input.Email, "Vahvista sähköposti",

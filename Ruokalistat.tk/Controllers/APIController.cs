@@ -9,7 +9,12 @@ namespace Digiruokalista.com.Controllers
     [ApiController]
     public class APIController : Controller
     {
-        private tietokantaContext db = new tietokantaContext();
+        private tietokantaContext db;
+        public APIController(tietokantaContext db)
+        {
+            this.db = db;
+        }
+
         [HttpGet]
         [Route("api/v1/HaeYritykset")]
         public List<Yritys> HaeYritykset()
