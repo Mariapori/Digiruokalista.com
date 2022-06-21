@@ -1,10 +1,18 @@
 ﻿
 @{
-    ViewData["Title"] = "Työkalut";
+    if (ViewBag.valittuRuoka != null)
+    {
+        ViewData["Title"] = ViewBag.valittuRuoka + " | Hintahistoria";
+    }
+    else
+    {
+         ViewData["Title"] = "Työkalut";
+    }
+   
     List<Digiruokalista.com.Models.Hintahistoria> Hintahistoria = null;
     if(ViewBag.hintahistoria != null)
     {
-          Hintahistoria  = ViewBag.hintahistoria;
+        Hintahistoria  = ViewBag.hintahistoria;
     }
     List<Yritys> Ravintolat = ViewBag.ravintolat;
 }
@@ -53,6 +61,21 @@
 }
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 <script type="text/javascript">
+
+        $(document).ready(function() {
+            $('#ravintola').select2({
+            language: {
+                inputTooShort: function () {
+                    return "Syötä pitempi hakusana";
+                },
+                noResults: function() {
+                    return "Ei löytynyt yhtään."
+                }
+            }
+        });
+    });
+
+
 function Populoi(event) {
     var ravintolaID = event.target.value;
         $("#ruuat").hide();

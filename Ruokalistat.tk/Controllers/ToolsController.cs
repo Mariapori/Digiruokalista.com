@@ -35,8 +35,9 @@ namespace Digiruokalista.com.Controllers
 
         public async Task<IActionResult> GetHintahistoria(int ravintola, int ruuat)
         {
-            ViewBag.ravintolat = await db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).ToListAsync();
+            ViewBag.ravintolat = await db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).Where(o => o.Ruokalista.piilotettu == false).ToListAsync();
             ViewBag.hintahistoria = await db.Hintahistoria.Where(o => o.Ruoka.ID == ruuat).ToListAsync();
+            ViewBag.valittuRuoka = db.Find<Ruoka>(ruuat).Nimi;
             return View("Index");
         }
     }

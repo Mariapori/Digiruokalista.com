@@ -25,6 +25,9 @@ namespace Ruokalistat.tk
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("fi-FI");
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("fi-FI");
+
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddDbContext<tietokantaContext>(options =>

@@ -89,7 +89,7 @@ namespace Ruokalistat.tk.Areas.Identity.Pages.Account.Manage
             var info = await _signInManager.GetExternalLoginInfoAsync(user.Id);
             if (info == null)
             {
-                throw new InvalidOperationException($"Unexpected error occurred loading external login info for user with ID '{user}'.");
+                throw new InvalidOperationException($"Unexpected error occurred loading external login info for user with ID '{user.Id}'.");
             }
 
             var result = await _userManager.AddLoginAsync(user, info);
