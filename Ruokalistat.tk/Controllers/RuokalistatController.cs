@@ -66,7 +66,7 @@ namespace Ruokalistat.tk.Controllers
         {
             List<SelectListItem> lista = new List<SelectListItem>();
 
-            foreach (var item in db.Yritys.Select(o => o.Kaupunki).Distinct().OrderBy(o => o).ToList())
+            foreach (var item in db.Yritys.Where(o => o.Ruokalista.piilotettu == false).Select(o => o.Kaupunki).Distinct().OrderBy(o => o).ToList())
             {
                 if (item.ToLower() == kaupunki)
                 {
