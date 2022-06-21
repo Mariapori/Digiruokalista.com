@@ -18,7 +18,7 @@ namespace Digiruokalista.com.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.ravintolat = await db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).ToListAsync();
+            ViewBag.ravintolat = await db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).Where(o => o.Ruokalista.piilotettu == false).ToListAsync();
             return View();
         }
 
