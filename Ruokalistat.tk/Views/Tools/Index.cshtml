@@ -1,14 +1,15 @@
 ﻿
 @{
-    if (ViewBag.valittuRuoka != null)
+    Yritys Rafla = ViewBag.ravintola;
+    if (ViewBag.valittuRuoka != null && ViewBag.ravintola != null)
     {
-        ViewData["Title"] = ViewBag.valittuRuoka + " | Hintahistoria";
+        ViewData["Title"] = ViewBag.valittuRuoka + " - " + Rafla.Nimi + " | Hintahistoria";
     }
     else
     {
-         ViewData["Title"] = "Työkalut";
+        ViewData["Title"] = "Työkalut";
     }
-   
+
     List<Digiruokalista.com.Models.Hintahistoria> Hintahistoria = null;
     if(ViewBag.hintahistoria != null)
     {
@@ -21,9 +22,11 @@
 
 <h2>Hintahistoria</h2>
 
-@if(@ViewBag.hintahistoria != null)
+@if(@ViewBag.hintahistoria != null && Rafla != null)
 {
+    <h2>@Rafla.Nimi</h2>
     <h3>@Hintahistoria.Select(o => o.Ruoka.Nimi).First()</h3>
+     <canvas id="myChart" style="max-height: 400px;"></canvas>
     <table class="table table-striped">
         <thead class="table-dark text-white">
             <tr>
@@ -35,7 +38,7 @@
         @foreach (var historia in Hintahistoria)
        {
            <tr>
-               <th>@historia.PVM.ToShortDateString()</th>
+               <th>@historia.PVM.ToString("dd.MM.yyyy")</th>
                <th>@historia.Hinta.ToString("0.00 €")</th>
            </tr>
        }
@@ -97,9 +100,47 @@ function Populoi(event) {
                 $("#lblValitse").show();
                 $("#ruuat").show();
                 $("#submitNappi").show();
+                $('#ruuat').select2({
+            language: {
+                inputTooShort: function () {
+                    return "Syötä pitempi hakusana";
+                },
+                noResults: function() {
+                    return "Ei löytynyt yhtään."
+                }
+            }
+        });
             });
             }, "json"
         );
     }
 }
+
+var xValues = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Hintahistoria?.Select(o => o.PVM.ToString("dd.MM.yyyy")).ToList()));
+var yValues = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Hintahistoria?.Select(o => o.Hinta).ToList()));
+
+new Chart("myChart", {
+  type: "line",
+  data: {
+    labels: xValues,
+    datasets: [{
+      label: "Hinta",
+      backgroundColor: "rgba(255,0,0,1.0)",
+      borderColor: "rgba(255,0,0,0.1)",
+      data: yValues
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Hintahistoria'
+      }
+    }
+  },
+});
 </script>

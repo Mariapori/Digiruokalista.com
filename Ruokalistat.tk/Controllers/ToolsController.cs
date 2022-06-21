@@ -38,6 +38,7 @@ namespace Digiruokalista.com.Controllers
             ViewBag.ravintolat = await db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).Where(o => o.Ruokalista.piilotettu == false).ToListAsync();
             ViewBag.hintahistoria = await db.Hintahistoria.Where(o => o.Ruoka.ID == ruuat).ToListAsync();
             ViewBag.valittuRuoka = db.Find<Ruoka>(ruuat).Nimi;
+            ViewBag.ravintola = db.Find<Yritys>(ravintola);
             return View("Index");
         }
     }

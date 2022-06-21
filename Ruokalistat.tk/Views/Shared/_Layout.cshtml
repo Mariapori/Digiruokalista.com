@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="manifest" href="~/manifest.json">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 <body>
@@ -40,6 +41,9 @@
             }
             <li class="nav-item">
                             <a class="nav-link text-white" href="/swagger" target="_blank">API</a>
+                        </li>
+                          <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Tools" asp-action="Index">Työkalut</a>
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
