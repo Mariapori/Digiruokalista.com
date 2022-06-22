@@ -3,6 +3,7 @@ using Digiruokalista.com.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Logging;
 
 #nullable disable
 
@@ -17,7 +18,14 @@ namespace Ruokalistat.tk.Models
         public tietokantaContext(DbContextOptions<tietokantaContext> options)
             : base(options)
         {
-            Database.Migrate();
+            try 
+            {
+                Database.Migrate();
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
 
         public virtual DbSet<Yritys> Yritys { get; set; }
