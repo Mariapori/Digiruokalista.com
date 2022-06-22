@@ -373,3 +373,5 @@ Ruokalistat.tk/.vscode/tasks.json
 Ruokalistat.tk/sitemap.xml
 
 *.db
+*.db-shm
+*.db-wal
