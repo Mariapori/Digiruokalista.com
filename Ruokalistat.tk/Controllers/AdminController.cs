@@ -101,5 +101,22 @@ namespace Ruokalistat.tk.Controllers
             db.SaveChanges();
             return RedirectToAction("Muokkaa", "Ruokalistat", new { ID = klooni.ID });
         }
+        [HttpPost]
+        public IActionResult ExecuteSQL(string sqlcmd)
+        {
+            ViewBag.users = _userManager.Users.ToList();
+            ViewBag.yritykset = db.Yritys.ToList();
+
+            try
+            {
+                var result = db.Database.ExecuteSqlRaw(sqlcmd);
+                ViewBag.sqlresponse = $"Komento suoritettu! Vaikutti {result} riviin.";
+            }catch(Exception ex)
+            {
+                ViewBag.sqlresponse = ex.Message;
+            }
+
+            return View("Index");
+        }
     }
 }

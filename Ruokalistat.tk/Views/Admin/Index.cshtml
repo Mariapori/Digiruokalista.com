@@ -97,3 +97,14 @@
     </tr>
 </table>
 }
+<hr />
+@if(ViewBag.sqlresponse != null)
+{
+    <div class="alert alert-primary" role="alert">@ViewBag.sqlresponse</div>
+}
+<h2>Suorita SQL-komento</h2>
+@using (Html.BeginForm("ExecuteSQL", "Admin", FormMethod.Post))
+{
+  <textarea id="sqlcmd" name="sqlcmd" style="width: 100%;"></textarea> <br />
+  <button class="btn btn-primary" type="submit">Suorita</button>
+}
