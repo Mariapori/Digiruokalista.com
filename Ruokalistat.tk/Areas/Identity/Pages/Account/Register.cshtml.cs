@@ -23,17 +23,20 @@ namespace Ruokalistat.tk.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         [BindProperty]
@@ -78,6 +81,14 @@ namespace Ruokalistat.tk.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    if(_userManager.Users.Count() == 1)
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole { Name = "Admin", NormalizedName = "Admin" });
+                        var firstUser = _userManager.Users.FirstOrDefault();
+                        await _userManager.AddToRoleAsync(firstUser, "Admin");
+                        _logger.LogInformation("Admin account created!");
+                    }
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -85,7 +96,7 @@ namespace Ruokalistat.tk.Areas.Identity.Pages.Account
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
-                        values: new { area = "Identity", userId = user, code = code, returnUrl = returnUrl },
+                        values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
                     await Special.Mail.Laheta(Input.Email, "Vahvista sähköposti",

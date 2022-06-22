@@ -12,12 +12,12 @@ namespace Ruokalistat.tk.Models
     {
         public tietokantaContext()
         {
-            Database.Migrate();
         }
 
         public tietokantaContext(DbContextOptions<tietokantaContext> options)
             : base(options)
         {
+            Database.Migrate();
         }
 
         public virtual DbSet<Yritys> Yritys { get; set; }
