@@ -24,7 +24,7 @@
 
 @if(@ViewBag.hintahistoria != null && Rafla != null)
 {
-    <h2>@Rafla.Nimi</h2>
+    <h2>@Rafla.Nimi - @Rafla.Kaupunki</h2>
     <h3>@Hintahistoria.Select(o => o.Ruoka.Nimi).First()</h3>
      <canvas id="myChart" style="max-height: 400px;"></canvas>
     <table class="table table-striped">

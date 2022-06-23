@@ -59,9 +59,9 @@ else
                     @foreach (var ruoka in kategoria.Ruuat.OrderBy(o => o.AnnosNumero).ThenBy(o => o.Hinta))
                     {
                         if(ruoka.AnnosNumero != 0){
-                        <dt>@ruoka.AnnosNumero.ToString(). @ruoka.Nimi</dt>
+                        <dt>@ruoka.AnnosNumero.ToString(). @ruoka.Nimi <a class="btn btn-light float-right" href="@Url.Action("GetHintahistoria", "Tools", new{ ravintola = Model.ID, ruuat = ruoka.ID})"><img style="float: right; max-width: 32px;" src="~/icons/profits.png" alt="Hintahistoria" title="Hintahistoria" /></a></dt>
                         }else{
-                        <dt>@ruoka.Nimi</dt>
+                        <dt>@ruoka.Nimi <a class="btn btn-light float-right" href="@Url.Action("GetHintahistoria", "Tools", new{ ravintola = Model.ID, ruuat = ruoka.ID})"><img style="float: right; max-width: 32px;" src="~/icons/profits.png" alt="Hintahistoria" title="Hintahistoria" /></a></dt>
                         }
                         <dd>
                             <p>@ruoka.Hinta.ToString("0.00 €")</p>
