@@ -33,12 +33,18 @@ namespace Digiruokalista.com.Controllers
             return Json(ruuat);
         }
 
-        public async Task<IActionResult> GetHintahistoria(int ravintola, int ruuat)
+        public async Task<IActionResult> GetHintahistoria(int ravintola, int ruuat, string? paluuOsoite)
         {
             ViewBag.ravintolat = await db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).Where(o => o.Ruokalista.piilotettu == false).ToListAsync();
             ViewBag.hintahistoria = await db.Hintahistoria.Where(o => o.Ruoka.ID == ruuat).ToListAsync();
             ViewBag.valittuRuoka = db.Find<Ruoka>(ruuat).Nimi;
             ViewBag.ravintola = db.Find<Yritys>(ravintola);
+
+            if(paluuOsoite != null && Url.IsLocalUrl(paluuOsoite))
+            {
+                ViewBag.paluuOsoite = paluuOsoite;
+            }
+
             return View("Index");
         }
     }

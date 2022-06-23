@@ -44,7 +44,14 @@
        }
         </tbody>
     </table>
-    @Html.ActionLink("Takaisin","Index","Tools",null,new {@class = "btn btn-danger"})
+    @if(ViewBag.paluuOsoite != null)
+    {
+        <a href="@ViewBag.paluuOsoite" class="btn btn-danger">Takaisin</a>
+    }
+    else
+    {
+           @Html.ActionLink("Sulje","Index","Tools",null,new {@class = "btn btn-danger"})
+    }
 }else{
 @using(Html.BeginForm("GetHintahistoria","Tools", FormMethod.Get)){
     <label>Valitse ravintola:</label>
