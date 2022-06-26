@@ -54,7 +54,7 @@ else
     {
         <div class="card text-white bg-dark mb-3" style="max-width: 18rem; min-width: 18rem !important;">
             <div class="card-header"><b>@kategoria.Nimi</b></div>
-            <div class="card-body" style="padding: 15px;">
+            <div class="card-body">
                 <dl>
                     @foreach (var ruoka in kategoria.Ruuat.OrderBy(o => o.AnnosNumero).ThenBy(o => o.Hinta))
                     {
@@ -71,7 +71,7 @@ else
                                 <p class="text-success">Vegaaninen</p>
                             }
                         </dd>
-                        <hr style="border-top: 1px dashed white;" />
+                        <hr style="border-top: 1px dashed white; padding: 10px;"/>
                     }
                 </dl>
             </div>
