@@ -24,6 +24,10 @@ a {
   border-color: #1861ac;
 }
 
+.btn-round {
+    border-radius: 50px;
+}
+
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
   background-color: #1b6ec2;
