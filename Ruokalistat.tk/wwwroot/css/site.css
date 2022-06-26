@@ -26,6 +26,7 @@ a {
 
 .btn-round {
     border-radius: 50px;
+    border: double;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
