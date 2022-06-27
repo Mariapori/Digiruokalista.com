@@ -101,7 +101,7 @@ namespace Ruokalistat.tk.Controllers
         public IActionResult Poista(int ID)
         {
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var ravintola = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
+            var ravintola = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).FirstOrDefault(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
             db.Yritys.Remove(ravintola);
             db.SaveChanges();
             return RedirectToAction("Index");
@@ -110,7 +110,7 @@ namespace Ruokalistat.tk.Controllers
         public IActionResult Muokkaa(int ID)
         {
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var ravintola = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
+            var ravintola = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat)?.FirstOrDefault(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
             return View(ravintola);
         }
 
@@ -120,7 +120,7 @@ namespace Ruokalistat.tk.Controllers
             try
             {
                 var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var vanha = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == model.ID && (o.Owner == user || User.IsInRole("Admin")));
+                var vanha = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).FirstOrDefault(o => o.ID == model.ID && (o.Owner == user || User.IsInRole("Admin")));
 
                 vanha.Kaupunki = model.Kaupunki;
                 vanha.Nimi = model.Nimi;
@@ -143,7 +143,7 @@ namespace Ruokalistat.tk.Controllers
         public IActionResult UusiKat(int YritysID, string Kuvaus, string Nimi2)
         {
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == YritysID && (o.Owner == user || User.IsInRole("Admin")));
+            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).FirstOrDefault(o => o.ID == YritysID && (o.Owner == user || User.IsInRole("Admin")));
             if (yritys.Ruokalista == null)
             {
                 yritys.Ruokalista = new Ruokalista();
@@ -158,8 +158,8 @@ namespace Ruokalistat.tk.Controllers
         public IActionResult PoistaKat(int ID, int KatID)
         {
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).First(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
-            var kategoria = yritys.Ruokalista.Kategoriat.First(o => o.ID == KatID);
+            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).FirstOrDefault(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
+            var kategoria = yritys.Ruokalista.Kategoriat.FirstOrDefault(o => o.ID == KatID);
             yritys.Ruokalista.viimeksiPaivitetty = DateTime.Now;
             db.Remove(kategoria);
             db.SaveChanges();
@@ -170,8 +170,8 @@ namespace Ruokalistat.tk.Controllers
         public IActionResult MuokkaaKat(int ID, int KatID)
         {
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).First(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
-            var kategoria = yritys.Ruokalista.Kategoriat.First(o => o.ID == KatID);
+            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).FirstOrDefault(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
+            var kategoria = yritys.Ruokalista.Kategoriat.FirstOrDefault(o => o.ID == KatID);
 
             ViewBag.yritysID = yritys.ID;
             ViewBag.katID = kategoria.ID;
@@ -182,8 +182,8 @@ namespace Ruokalistat.tk.Controllers
         public IActionResult MuokkaaKat(int katID, int YritysID, Kategoria model)
         {
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).First(o => o.ID == YritysID && (o.Owner == user || User.IsInRole("Admin")));
-            var kategoria = yritys.Ruokalista.Kategoriat.First(o => o.ID == katID);
+            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).FirstOrDefault(o => o.ID == YritysID && (o.Owner == user || User.IsInRole("Admin")));
+            var kategoria = yritys.Ruokalista.Kategoriat.FirstOrDefault(o => o.ID == katID);
 
             kategoria.Nimi = model.Nimi;
             kategoria.Kuvaus = model.Kuvaus;
@@ -197,8 +197,8 @@ namespace Ruokalistat.tk.Controllers
         public IActionResult UusiRuoka(int Kategoria, int YritysID, string Nimi3, string Kuvaus2, bool Vegan, decimal Hinta, bool Annos, int annosNro)
         {
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == YritysID && (o.Owner == user || User.IsInRole("Admin")));
-            var kategoria = yritys.Ruokalista.Kategoriat.First(o => o.ID == Kategoria);
+            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).FirstOrDefault(o => o.ID == YritysID && (o.Owner == user || User.IsInRole("Admin")));
+            var kategoria = yritys.Ruokalista.Kategoriat.FirstOrDefault(o => o.ID == Kategoria);
             var ruoka = new Ruoka { Vegan = Vegan, Nimi = Nimi3, Kuvaus = Kuvaus2, Hinta = Hinta, Annos = Annos, AnnosNumero = annosNro };
             kategoria.Ruuat.Add(ruoka);
 
@@ -213,8 +213,8 @@ namespace Ruokalistat.tk.Controllers
         public IActionResult PoistaRuoka(int ID, int RuokaID)
         {
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
-            var ruoka = yritys.Ruokalista.Kategoriat.SelectMany(o => o.Ruuat).First(o => o.ID == RuokaID);
+            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).FirstOrDefault(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
+            var ruoka = yritys.Ruokalista.Kategoriat.SelectMany(o => o.Ruuat).FirstOrDefault(o => o.ID == RuokaID);
 
             db.Remove(ruoka);
 
@@ -227,8 +227,8 @@ namespace Ruokalistat.tk.Controllers
         public IActionResult MuokkaaRuoka(int ID, int RuokaID)
         {
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
-            var ruoka = yritys.Ruokalista.Kategoriat.SelectMany(o => o.Ruuat).First(o => o.ID == RuokaID);
+            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat)?.FirstOrDefault(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
+            var ruoka = yritys.Ruokalista.Kategoriat.SelectMany(o => o.Ruuat).FirstOrDefault(o => o.ID == RuokaID);
 
             ViewBag.yritysID = yritys.ID;
             ViewBag.ruokaID = ruoka.ID;
@@ -240,8 +240,8 @@ namespace Ruokalistat.tk.Controllers
         {
             bool hintaMuuttui = false;
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == YritysID && (o.Owner == user || User.IsInRole("Admin")));
-            var ruoka = yritys.Ruokalista.Kategoriat.SelectMany(o => o.Ruuat).First(o => o.ID == RuokaID);
+            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).FirstOrDefault(o => o.ID == YritysID && (o.Owner == user || User.IsInRole("Admin")));
+            var ruoka = yritys.Ruokalista.Kategoriat.SelectMany(o => o.Ruuat).FirstOrDefault(o => o.ID == RuokaID);
 
             if(ruoka.Hinta != model.Hinta)
             {
@@ -269,13 +269,13 @@ namespace Ruokalistat.tk.Controllers
         [AllowAnonymous]
         public IActionResult Katso(int YritysID)
         {
-            var yritys = db.Yritys.Include(o => o.Arvostelut).Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == YritysID && o.Ruokalista.piilotettu == false);
+            var yritys = db.Yritys.Include(o => o.Arvostelut).Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).FirstOrDefault(o => o.ID == YritysID && o.Ruokalista.piilotettu == false);
             return View("Katso", yritys);
         }
         [AllowAnonymous]
         public IActionResult Arvostele(int YritysID)
         {
-            var yritys = db.Yritys.Include(o => o.Arvostelut).Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == YritysID);
+            var yritys = db.Yritys.Include(o => o.Arvostelut).Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).FirstOrDefault(o => o.ID == YritysID);
 
             if (yritys.Arvostelut.Where(o => o.source == GetIP()).ToList().Count == 0)
             {
@@ -300,7 +300,7 @@ namespace Ruokalistat.tk.Controllers
         [AllowAnonymous]
         public IActionResult GeneroiQR(int YritysID)
         {
-            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).First(o => o.ID == YritysID);
+            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).FirstOrDefault(o => o.ID == YritysID);
 
             Url generator = new Url(Url.Action("Katso", "Ruokalistat", new { YritysID = yritys.ID }, "https"));
             string payload = generator.ToString();
