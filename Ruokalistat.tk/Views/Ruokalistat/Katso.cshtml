@@ -56,13 +56,12 @@ else
             <div class="card-header"><b>@kategoria.Nimi</b></div>
             <div class="card-body">
                 <dl>
-                    <div class="container">
                     @foreach (var ruoka in kategoria.Ruuat.OrderBy(o => o.AnnosNumero).ThenBy(o => o.Hinta))
                     {
                         if(ruoka.AnnosNumero != 0){
-                        <dt><span>@ruoka.AnnosNumero.ToString(). @ruoka.Nimi</span><a style="right:1px;" class="btn btn-round btn-light float-right position-absolute" href="@Url.Action("GetHintahistoria", "Tools", new{ ravintola = Model.ID, ruuat = ruoka.ID, paluuOsoite = Url.Action("Katso","Ruokalistat", new{ YritysID = Model.ID })})"><img style="float: right; max-width: 32px;" src="~/icons/profits.png" alt="Hintahistoria" title="Hintahistoria" /></a></dt>
+                        <dt><p>@ruoka.AnnosNumero.ToString(). @ruoka.Nimi</p></dt>
                         }else{
-                        <dt><span>@ruoka.Nimi</span><a style="right:1px;" class="btn btn-round btn-light float-right position-absolute" href="@Url.Action("GetHintahistoria", "Tools", new{ ravintola = Model.ID, ruuat = ruoka.ID, paluuOsoite = Url.Action("Katso","Ruokalistat", new{ YritysID = Model.ID })})"><img style="float: right; max-width: 32px;" src="~/icons/profits.png" alt="Hintahistoria" title="Hintahistoria" /></a></dt>
+                        <dt><p>@ruoka.Nimi</p></dt>
                         }
                         <dd>
                             <p>@ruoka.Hinta.ToString("0.00 €")</p>
@@ -72,9 +71,9 @@ else
                                 <p class="text-success">Vegaaninen</p>
                             }
                         </dd>
+                        <a class="btn btn-round btn-light" href="@Url.Action("GetHintahistoria", "Tools", new{ ravintola = Model.ID, ruuat = ruoka.ID, paluuOsoite = Url.Action("Katso","Ruokalistat", new{ YritysID = Model.ID })})"><img style="max-width: 32px;" src="~/icons/profits.png" alt="Hintahistoria" title="Hintahistoria" /></a>
                         <hr style="border-top: 1px dashed white;"/>
                     }
-                    </div>
                 </dl>
             </div>
             <div class="card-footer">
