@@ -27,5 +27,11 @@ namespace Digiruokalista.com.Controllers
         {
             return db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).OrderBy(o => o.Nimi).Where(o => o.Ruokalista.piilotettu == false).FirstOrDefault(o => o.ID == id);
         }
+        [HttpGet]
+        [Route("api/v1/HaeTykkaykset")]
+        public int HaeTykkaykset(int YritysID){
+            var yritys = db.Yritys.Include(o => o.Arvostelut).FirstOrDefault(o => o.ID == YritysID);
+            return yritys?.Arvostelut.Count() ?? 0;
+        }
     }
 }
