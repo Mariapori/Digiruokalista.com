@@ -14,6 +14,7 @@ using PagedList;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using Microsoft.Extensions.Logging;
 
 namespace Ruokalistat.tk.Controllers
 {
@@ -22,12 +23,14 @@ namespace Ruokalistat.tk.Controllers
     public class RuokalistatController : Microsoft.AspNetCore.Mvc.Controller
     {
         private tietokantaContext db;
+        private readonly ILogger _logger;
         private int tuloksienMaara = 15;
 
 
-        public RuokalistatController(tietokantaContext db) 
+        public RuokalistatController(tietokantaContext db, ILogger<RuokalistatController> logger) 
         {
             this.db = db;
+            _logger = logger;
         }
 
 
@@ -226,14 +229,17 @@ namespace Ruokalistat.tk.Controllers
 
         public IActionResult MuokkaaRuoka(int ID, int RuokaID)
         {
+            if(ID > 0 || RuokaID > 0){
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat)?.FirstOrDefault(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
             var ruoka = yritys.Ruokalista.Kategoriat.SelectMany(o => o.Ruuat).FirstOrDefault(o => o.ID == RuokaID);
 
             ViewBag.yritysID = yritys.ID;
             ViewBag.ruokaID = ruoka.ID;
+                return View(ruoka);
+            }
 
-            return View("MuokkaaRuoka", ruoka);
+            return View();
         }
         [HttpPost]
         public IActionResult MuokkaaRuoka(int RuokaID, int YritysID, Ruoka model)
@@ -242,10 +248,11 @@ namespace Ruokalistat.tk.Controllers
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).FirstOrDefault(o => o.ID == YritysID && (o.Owner == user || User.IsInRole("Admin")));
             var ruoka = yritys.Ruokalista.Kategoriat.SelectMany(o => o.Ruuat).FirstOrDefault(o => o.ID == RuokaID);
-
+            decimal? muuttunutHinta = 0m;
             if(ruoka.Hinta != model.Hinta)
             {
                 hintaMuuttui = true;
+                muuttunutHinta = ruoka.Hinta;
             }
 
             ruoka.Nimi = model.Nimi;
@@ -260,6 +267,7 @@ namespace Ruokalistat.tk.Controllers
 
             if (hintaMuuttui)
             {
+                _logger.LogInformation($"Ravintola: {yritys.Nimi} | Ruoka: {ruoka.Nimi} | Hinta muuttui: {muuttunutHinta}€ -> {model.Hinta}€");
                 db.Hintahistoria.Add(new Digiruokalista.com.Models.Hintahistoria { PVM = DateTime.Now, Ruoka = ruoka, Hinta = model.Hinta });
             }
 
