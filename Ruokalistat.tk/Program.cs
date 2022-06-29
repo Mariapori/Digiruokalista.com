@@ -25,6 +25,11 @@ namespace Ruokalistat.tk
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Host.ConfigureLogging(logging => {
+                logging.ClearProviders();
+                logging.AddConsole();
+            });
+
             System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("fi-FI");
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("fi-FI");
 

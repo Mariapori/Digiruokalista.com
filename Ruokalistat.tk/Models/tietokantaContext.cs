@@ -11,20 +11,24 @@ namespace Ruokalistat.tk.Models
 {
     public partial class tietokantaContext : IdentityDbContext
     {
+        private readonly ILogger _logger;
         public tietokantaContext()
         {
+            
         }
 
-        public tietokantaContext(DbContextOptions<tietokantaContext> options)
+        public tietokantaContext(DbContextOptions<tietokantaContext> options,ILogger<tietokantaContext> logger)
             : base(options)
         {
+            _logger = logger;
             try 
             {
                 Database.Migrate();
+                _logger.LogInformation("Tietokanta migraatio on suoritettu!");
             }
             catch(Exception ex)
             {
-
+                _logger.LogError(ex,"Tietokanta migraatiota ei voitu toteuttaa.");
             }
         }
 
