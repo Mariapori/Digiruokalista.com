@@ -22,6 +22,7 @@ namespace Ruokalistat.tk.Models
         public string Postinumero { get; set; }
         [Required]
         public string Kaupunki { get; set; }
+        public string VapaaTeksti {get;set;}
         public string Puhelin { get; set; }
         public Ruokalista Ruokalista { get; set; }
         public string Owner { get; set; }

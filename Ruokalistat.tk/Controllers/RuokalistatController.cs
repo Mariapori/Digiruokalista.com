@@ -104,7 +104,7 @@ namespace Ruokalistat.tk.Controllers
         public IActionResult Poista(int ID)
         {
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var ravintola = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).FirstOrDefault(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
+            var ravintola = db.Yritys.Include(o => o.Arvostelut).Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).FirstOrDefault(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
             db.Yritys.Remove(ravintola);
             db.SaveChanges();
             return RedirectToAction("Index");
@@ -131,6 +131,7 @@ namespace Ruokalistat.tk.Controllers
                 vanha.Postinumero = model.Postinumero;
                 vanha.Puhelin = model.Puhelin;
                 vanha.yTunnus = model.yTunnus;
+                vanha.VapaaTeksti = model.VapaaTeksti;
                 vanha.Ruokalista.piilotettu = model.Ruokalista.piilotettu;
 
 
@@ -216,9 +217,10 @@ namespace Ruokalistat.tk.Controllers
         public IActionResult PoistaRuoka(int ID, int RuokaID)
         {
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var hintahistoria = db.Hintahistoria.Where(o => o.Ruoka.ID == RuokaID).ToList();
             var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).FirstOrDefault(o => o.ID == ID && (o.Owner == user || User.IsInRole("Admin")));
             var ruoka = yritys.Ruokalista.Kategoriat.SelectMany(o => o.Ruuat).FirstOrDefault(o => o.ID == RuokaID);
-
+            db.Hintahistoria.RemoveRange(hintahistoria);
             db.Remove(ruoka);
 
             yritys.Ruokalista.viimeksiPaivitetty = DateTime.Now;
@@ -236,7 +238,7 @@ namespace Ruokalistat.tk.Controllers
 
             ViewBag.yritysID = yritys.ID;
             ViewBag.ruokaID = ruoka.ID;
-                return View(ruoka);
+            return View(ruoka);
             }
 
             return View();
