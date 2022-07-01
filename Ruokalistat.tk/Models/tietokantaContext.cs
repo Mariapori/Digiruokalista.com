@@ -20,6 +20,7 @@ namespace Ruokalistat.tk.Models
         public tietokantaContext(DbContextOptions<tietokantaContext> options,ILogger<tietokantaContext> logger)
             : base(options)
         {
+
             _logger = logger;
             try 
             {
@@ -34,6 +35,11 @@ namespace Ruokalistat.tk.Models
 
         public virtual DbSet<Yritys> Yritys { get; set; }
         public virtual DbSet<Hintahistoria> Hintahistoria { get; set; }
+        public virtual DbSet<Ruokalista> Ruokalista {get;set;}
+        public virtual DbSet<Ruoka> Ruoka {get;set;}
+        public virtual DbSet<Kategoria> Kategoria {get;set;}
+        public virtual DbSet<Arvostelu> Arvostelu {get;set;}
+        
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
