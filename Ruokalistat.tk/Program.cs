@@ -16,6 +16,7 @@ using AspNetCore.SEOHelper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.OpenApi.Models;
 using Ruokalistat.tk.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Ruokalistat.tk
 {
@@ -43,7 +44,7 @@ namespace Ruokalistat.tk
                 .AddEntityFrameworkStores<tietokantaContext>();
             builder.Services.AddControllersWithViews();
             builder.WebHost.UseUrls("http://*:6669");
-
+            builder.Services.AddTransient<IEmailSender,Special.Mail>();
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("all", policy => {

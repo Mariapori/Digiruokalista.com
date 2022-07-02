@@ -61,7 +61,7 @@ namespace Ruokalistat.tk.Areas.Identity.Pages.Account
                 pageHandler: null,
                 values: new { userId = userId, code = code },
                 protocol: Request.Scheme);
-            await Special.Mail.Laheta(
+            await _emailSender.SendEmailAsync(
                 Input.Email,
                 "Vahvista sähköposti",
                 $"Vahvista sähköposti painamalla <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>tästä</a>.");

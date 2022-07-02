@@ -56,7 +56,7 @@ namespace Ruokalistat.tk.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
-                await Special.Mail.Laheta(
+                await _emailSender.SendEmailAsync(
                     Input.Email,
                     "Nollaa salasana",
                     $"Nollaa salasana painamalla <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>tästä</a>.");

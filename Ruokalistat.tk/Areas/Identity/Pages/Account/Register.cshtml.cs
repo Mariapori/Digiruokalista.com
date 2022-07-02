@@ -99,7 +99,7 @@ namespace Ruokalistat.tk.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await Special.Mail.Laheta(Input.Email, "Vahvista sähköposti",
+                    await _emailSender.SendEmailAsync(Input.Email, "Vahvista sähköposti",
                         $"Vahvista sähköposti painamalla <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>tästä</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)

@@ -3,14 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Ruokalistat.tk.Special
 {
-    public static class Mail
+    public class Mail : IEmailSender
     {
-        private static SmtpClient smtp = new SmtpClient();
+        private SmtpClient smtp = new SmtpClient();
         
-        public static async Task Laheta(string email, string subject, string body)
+        public async Task SendEmailAsync(string email, string subject, string body)
         {
             await smtp.ConnectAsync(Digiruokalista.com.Properties.Resources.smtpHost, Convert.ToInt32(Digiruokalista.com.Properties.Resources.smtpPort), Convert.ToBoolean(Digiruokalista.com.Properties.Resources.useSSL));
             if(!string.IsNullOrEmpty(Digiruokalista.com.Properties.Resources.username) && !string.IsNullOrEmpty(Digiruokalista.com.Properties.Resources.password))
