@@ -1,6 +1,7 @@
 ﻿@model Ruoka
 @{
     ViewData["Title"] = Model.Nimi;
+    List<SelectListItem> Kategoriat = ViewBag.kategoriat;
 }
 
 <h1>Muokkaa</h1>
@@ -15,6 +16,10 @@
     <tr>
         <th>Nimi</th>
         <td>@Html.TextBoxFor(o => o.Nimi)</td>
+    </tr>
+    <tr>
+        <th>Kategoria</th>
+        <td>@Html.DropDownList("KategoriaID",Kategoriat, "Vaihda kategoria")</td>
     </tr>
     <tr>
         <th>Kuvaus</th>

@@ -83,6 +83,25 @@ namespace Ruokalistat.tk.Controllers
             return lista;
         }
 
+        public List<SelectListItem> RavintolanKategoriat(int YritysID, int RuokaID)
+        {
+            List<SelectListItem> lista = new List<SelectListItem>();
+            var yritys = db.Yritys.Include(o => o.Ruokalista).ThenInclude(o => o.Kategoriat).ThenInclude(o => o.Ruuat).FirstOrDefault(o => o.ID == YritysID);
+            var ruoka = db.Ruoka.FirstOrDefault(o => o.ID == RuokaID);
+            var kat = yritys.Ruokalista.Kategoriat.FirstOrDefault(o => o.Ruuat.Contains(ruoka));
+            foreach (var item in yritys?.Ruokalista?.Kategoriat)
+            {
+                if(item.ID == kat.ID){
+                lista.Add(new SelectListItem{ Text = item.Nimi, Value = item.ID.ToString(), Selected = true});
+
+                }else{
+                lista.Add(new SelectListItem{ Text = item.Nimi, Value = item.ID.ToString(), Selected = false});
+                }
+            }
+            
+            return lista;
+        }
+
         [HttpPost]
         public IActionResult Uusi(Yritys model)
         {
@@ -238,13 +257,15 @@ namespace Ruokalistat.tk.Controllers
 
             ViewBag.yritysID = yritys.ID;
             ViewBag.ruokaID = ruoka.ID;
+            ViewBag.kategoriat = RavintolanKategoriat(yritys.ID, ruoka.ID);
+  
             return View(ruoka);
             }
 
             return View();
         }
         [HttpPost]
-        public IActionResult MuokkaaRuoka(int RuokaID, int YritysID, Ruoka model)
+        public IActionResult MuokkaaRuoka(int RuokaID, int YritysID, Ruoka model, int KategoriaID)
         {
             bool hintaMuuttui = false;
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -263,6 +284,16 @@ namespace Ruokalistat.tk.Controllers
             ruoka.Vegan = model.Vegan;
             ruoka.Annos = model.Annos;
             ruoka.AnnosNumero = model.AnnosNumero;
+
+            if(KategoriaID > 0)
+            {
+                var kat = yritys.Ruokalista.Kategoriat.FirstOrDefault(o => o.Ruuat.Contains(ruoka));
+                kat.Ruuat.Remove(ruoka);
+
+                var newKat = db.Kategoria.FirstOrDefault(o => o.ID == KategoriaID);
+
+                newKat.Ruuat.Add(ruoka);
+            }
 
             yritys.Ruokalista.viimeksiPaivitetty = DateTime.Now;
             
